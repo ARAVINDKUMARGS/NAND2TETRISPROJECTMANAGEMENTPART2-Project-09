@@ -1,0 +1,118 @@
+// File: PixelMaze.vm
+function PixelMaze.init 0
+push constant 10
+pop local 0      // row = 10
+push constant 10
+pop local 1      // col = 10
+push constant 1
+pop local 2      // pixel = 1
+return
+
+function PixelMaze.drawPixel 0
+push local 0     // row
+push local 1     // col
+push local 2     // pixel
+call Sys.Screen.setPixel 3
+return
+
+function PixelMaze.moveUp 0
+push local 0
+push constant 0
+gt
+if-goto MOVEUP_LABEL
+goto MOVEUP_END
+label MOVEUP_LABEL
+push local 0
+push constant 1
+sub
+pop local 0
+label MOVEUP_END
+call PixelMaze.drawPixel 0
+return
+
+function PixelMaze.moveDown 0
+push local 0
+push constant 255
+lt
+if-goto MOVEDOWN_LABEL
+goto MOVEDOWN_END
+label MOVEDOWN_LABEL
+push local 0
+push constant 1
+add
+pop local 0
+label MOVEDOWN_END
+call PixelMaze.drawPixel 0
+return
+
+function PixelMaze.moveLeft 0
+push local 1
+push constant 0
+gt
+if-goto MOVELEFT_LABEL
+goto MOVELEFT_END
+label MOVELEFT_LABEL
+push local 1
+push constant 1
+sub
+pop local 1
+label MOVELEFT_END
+call PixelMaze.drawPixel 0
+return
+
+function PixelMaze.moveRight 0
+push local 1
+push constant 255
+lt
+if-goto MOVERIGHT_LABEL
+goto MOVERIGHT_END
+label MOVERIGHT_LABEL
+push local 1
+push constant 1
+add
+pop local 1
+label MOVERIGHT_END
+call PixelMaze.drawPixel 0
+return
+
+function PixelMaze.run 1
+call PixelMaze.init 0
+label LOOP
+call Sys.Keyboard.keyPressed 0
+pop local 3    // key
+push local 3
+push constant 65362
+eq
+if-goto KEY_UP
+push local 3
+push constant 65364
+eq
+if-goto KEY_DOWN
+push local 3
+push constant 65361
+eq
+if-goto KEY_LEFT
+push local 3
+push constant 65363
+eq
+if-goto KEY_RIGHT
+goto LOOP_CONTINUE
+label KEY_UP
+call PixelMaze.moveUp 0
+goto LOOP
+label KEY_DOWN
+call PixelMaze.moveDown 0
+goto LOOP
+label KEY_LEFT
+call PixelMaze.moveLeft 0
+goto LOOP
+label KEY_RIGHT
+call PixelMaze.moveRight 0
+goto LOOP
+label LOOP_CONTINUE
+goto LOOP
+return
+
+function PixelMaze.main 0
+call PixelMaze.run 0
+return
