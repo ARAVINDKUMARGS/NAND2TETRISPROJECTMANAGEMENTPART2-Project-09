@@ -1,0 +1,73 @@
+// File: PixelMaze.jack
+class PixelMaze {
+
+    field int row, col;  // Current position
+    field int pixel;     // Pixel value
+
+    function void init() {
+        let row = 10;
+        let col = 10;
+        let pixel = 1;
+        return;
+    }
+
+    function void drawPixel() {
+        do Sys.Screen.setPixel(row, col, pixel);
+        return;
+    }
+
+    function void moveUp() {
+        if (row > 0) {
+            let row = row - 1;
+        }
+        do drawPixel();
+        return;
+    }
+
+    function void moveDown() {
+        if (row < 255) { // Hack screen height
+            let row = row + 1;
+        }
+        do drawPixel();
+        return;
+    }
+
+    function void moveLeft() {
+        if (col > 0) {
+            let col = col - 1;
+        }
+        do drawPixel();
+        return;
+    }
+
+    function void moveRight() {
+        if (col < 255) { // Hack screen width
+            let col = col + 1;
+        }
+        do drawPixel();
+        return;
+    }
+
+    function void run() {
+        var int key;
+        do init();
+        while (true) {
+            let key = do Sys.Keyboard.keyPressed();
+            if (key = 65362) {    // Up arrow
+                do moveUp();
+            } else if (key = 65364) { // Down arrow
+                do moveDown();
+            } else if (key = 65361) { // Left arrow
+                do moveLeft();
+            } else if (key = 65363) { // Right arrow
+                do moveRight();
+            }
+        }
+    }
+
+    // Entry point
+    function void main() {
+        do run();
+        return;
+    }
+}
